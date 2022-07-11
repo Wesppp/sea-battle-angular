@@ -4,7 +4,6 @@ import {Player} from "../models/player";
 import {Ship} from "../models/ship";
 import {GameStatus} from "../models/game-status";
 import {HelperService} from "./helper.service";
-import {Location} from "@angular/common";
 import {Field} from "../models/field";
 
 @Injectable({
@@ -27,12 +26,10 @@ export class GameService {
   game!: Game
   player!: Player
   opponentField: Field = new Field()
-  // opponent!: Player
   playerTurn: boolean = false
   messages: string[] = []
 
-  constructor(private helperService: HelperService,
-              private location: Location) {
+  constructor(private helperService: HelperService) {
   }
 
   shipsInit() {

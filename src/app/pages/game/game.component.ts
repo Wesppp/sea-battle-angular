@@ -3,9 +3,6 @@ import {GameService} from "../../shared/services/game.service";
 import {Game} from "../../shared/models/game";
 import {Player} from "../../shared/models/player";
 import {SocketService} from "../../shared/services/socket.service";
-import {Field} from "../../shared/models/field";
-import {Location} from '@angular/common';
-import {HelperService} from "../../shared/services/helper.service";
 
 @Component({
   selector: 'app-game',

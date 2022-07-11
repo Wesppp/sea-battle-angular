@@ -14,16 +14,12 @@ export class OpponentFieldComponent implements OnInit {
   @ViewChildren('cell') cells!: QueryList<any>
 
   constructor(public gameService: GameService,
-              private socketService: SocketService) {
-  }
+              private socketService: SocketService) {}
 
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void {}
 
   makeShot(cell: Cell) {
     if (this.gameService.game.status !== 1 || !this.gameService.playerTurn) return;
-
     if (cell.status === 4 || cell.status === 3) return
 
     this.socketService.emit('addShot', {x: cell.x, y: cell.y}).subscribe()

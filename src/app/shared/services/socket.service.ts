@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import io from "socket.io-client";
 import {Observable} from "rxjs";
-import {GameService} from "./game.service";
 import {Field} from "../models/field";
 
 @Injectable({
