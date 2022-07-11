@@ -74,8 +74,10 @@ export class GameComponent implements OnInit {
   }
 
   createGame() {
-    // @ts-ignore
-    const name: string = prompt('Fill your name')
+    let name: any = prompt('Enter your name')
+    while (!name) {
+      name = prompt('Enter your name')
+    }
 
     this.gameService.player = new Player(name);
     this.gameService.game = new Game()
