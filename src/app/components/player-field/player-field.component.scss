@@ -1,0 +1,27 @@
+table {
+  position: relative;
+}
+
+.ship {
+  z-index: 2;
+  border: 2px solid #00f;
+  background: rgb(0 0 255 / 15%);
+  position: absolute !important;
+  margin: -2px;
+}
+
+.reset-ref {
+  color: yellow;
+  margin-left: 0.5rem;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  a {
+    text-decoration: underline;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+}
+
+

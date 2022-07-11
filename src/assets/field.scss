@@ -1,0 +1,88 @@
+.field {
+  margin: 0 0 0 0;
+  padding: 0;
+
+  table {
+    background-color: #EEE;
+    margin: .5em;
+    padding: .3em .3em;
+    height: 1.6em;
+    border-radius: 3px;
+    border-collapse: collapse;
+  }
+
+  tr {
+  }
+
+  td {
+    border: solid 1px #a8b1ff;
+    height: 2em;
+    width: 2em;
+    position: relative;
+
+    &:hover {
+      color: #607D8B;
+      background-color: #DDD;
+    }
+  }
+
+  h3 {
+    text-align: center;
+    color: #f8f8f8;
+    font-size: 1.1rem;
+    margin: 0;
+  }
+
+  .marker {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    color: #3098c8;
+    font-weight: 500;
+  }
+
+  .marker-row {
+    left: -35px;
+  }
+  .marker-column {
+    top: -35px;
+  }
+
+  .cell {
+    position: relative;
+
+    &.miss {
+      z-index: 5;
+      background: repeating-linear-gradient(-60deg, #0040ff 0, #8b9cff 1px, transparent 1px, transparent 5px);
+    }
+
+    &.hit {
+      z-index: 5;
+      opacity: .6;
+      background: repeating-linear-gradient(-60deg, rgba(255, 63, 63, 0.4) 0, rgba(255, 68, 68, 0.4) 1px, transparent 1px, transparent 5px);
+      &:after {
+        position: absolute;
+        top: 6px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        content: "\2716";
+        color: #ff6363;
+        text-align: center;
+        font-size: 25px;
+      }
+    }
+
+    &.killed {
+      z-index: 5;
+      opacity: 1;
+      border: 1px double red;
+    }
+  }
+}

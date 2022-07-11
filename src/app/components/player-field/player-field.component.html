@@ -1,0 +1,29 @@
+<div class="field">
+  <table class="field-grid" #field>
+    <tr *ngFor="let row of gameService.player.field.shots; let i = index">
+      <td class="cell" *ngFor="let cell of row; let j = index" #cell [attr.data-x]="cell.x" [attr.data-y]="cell.y"
+          [ngClass]="{
+          'hit': cell.status === 4,
+          'miss': cell.status === 3,
+          'killed': cell?.ship?.killed
+          }">
+        <div class="marker marker-column" *ngIf="i === 0">{{ 'ABCDEEFGHI'[j] }}</div>
+        <div class="marker marker-row" *ngIf="j === 0">{{ i }}</div>
+<!--        {{cell.status}}-->
+      </td>
+    </tr>
+
+    <div [cdkDragData]="ship" cdkDrag [className]="ship.direction === 'row'? 'ship ship-row-'+ship.size: 'ship ship-column-'+ship.size"
+         *ngFor="let ship of gameService.player.shipsArray"
+         [style.left.px]="ship.left" [style.top.px]="ship.top" (cdkDragEnded)="dragEnded($event)"
+         [cdkDragDisabled]="gameService.game.status !== 0" (cdkDragStarted)="dragStart($event)"></div>
+  </table>
+
+  <div class="reset-ref">
+    <h3>Your field</h3>
+      <a *ngIf="gameService.game.status === 0" (click)="gameService.resetPlayerField()">From scratch</a>
+      <a *ngIf="gameService.game.status === 0" (click)="randomize()">Random</a>
+  </div>
+</div>
+
+

@@ -1,0 +1,93 @@
+.container {
+  max-width: 900px;
+  min-width: 400px;
+  margin: 0 auto;
+
+  .game-body {
+    margin-top: 4rem;
+    display: flex;
+    justify-content: space-between;
+
+    .annunciator {
+      font-size: 1.2rem;
+      color: #fff;
+      font-weight: 500;
+    }
+
+    .while-game {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      button {
+        margin-bottom: 2rem;
+      }
+    }
+  }
+
+  .options {
+    padding-left: 0;
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+
+    li {
+      margin-top: .5rem;
+
+      button {
+        width: 150px;
+      }
+    }
+  }
+
+  .game-status {
+    text-align: center;
+    font-size: 1.2rem;
+    color: white;
+
+    span {
+      color: yellow;
+    }
+  }
+
+  .chat {
+    display: flex;
+    margin-top: 1rem;
+    flex-direction: column;
+    padding: 0 1rem;
+
+    .chat-input {
+      width: 90%;
+      font-size: 1.2rem;
+      border: 2px double #5080ff;
+      border-radius: 5px;
+      outline: none;
+      padding: 0.3rem 0.6rem
+    }
+
+    button {
+      margin-left: .2rem;
+    }
+
+    .chat-body {
+      display: flex;
+      align-items: center;
+    }
+
+    ul {
+      list-style-type: none;
+      font-size: 1.2rem;
+      color: white;
+      height: 150px;
+      overflow: auto;
+
+      li {
+        margin: 0.5rem 0;
+
+        .send-time {
+          color: yellow;
+        }
+      }
+    }
+  }
+}

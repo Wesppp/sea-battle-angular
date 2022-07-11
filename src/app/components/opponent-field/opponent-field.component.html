@@ -1,0 +1,17 @@
+<div class="field">
+  <table>
+    <tr *ngFor="let row of gameService.opponentField.shots; let i = index">
+      <td class="cell" *ngFor="let cell of row; let j = index" (click)="makeShot(cell)"
+          [ngClass]="{
+          'hit': cell.status === 4,
+          'miss': cell.status === 3,
+          'killed': cell?.ship?.killed
+          }">
+        <div class="marker marker-column" *ngIf="i === 0">{{ 'ABCDEEFGHI'[j] }}</div>
+        <div class="marker marker-row" *ngIf="j === 0">{{ i }}</div>
+<!--        {{cell.status}}-->
+      </td>
+    </tr>
+  </table>
+  <h3>Opponent field</h3>
+</div>

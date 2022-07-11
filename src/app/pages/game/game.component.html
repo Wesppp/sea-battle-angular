@@ -1,0 +1,58 @@
+<div class="container">
+  <div class="game-status">
+    <p>Status of game: <span>{{ displayGameStatus() }}</span></p>
+    <p>
+      <small class="players-count">Players online : {{ playersCount }}</small>
+    </p>
+  </div>
+  <div class="game-body">
+    <app-player-field></app-player-field>
+
+    <ng-template #annunciator>
+      <div class="while-game">
+        <p class="annunciator" *ngIf="gameService.game.status === 1">
+          {{gameService.playerTurn ? 'Your turn': "Opponent's turn"}}
+        </p>
+
+        <button *ngIf="gameService.game.status === 1" mat-raised-button
+                (click)="giveUp()">Give up</button>
+      </div>
+    </ng-template>
+
+      <ul class="options" *ngIf="gameService.game.status === 0; else annunciator" >
+        <li>
+          <button [disabled]="gameService.player.status !== 2" mat-raised-button
+                  (click)="callForFight()">Сall for a fight</button>
+        </li>
+
+        <li>
+          <button [disabled]="gameService.player.status !== 2" mat-raised-button
+                  (click)="takeChallenge()">Take the challenge</button>
+        </li>
+
+        <li>
+          <button [disabled]="gameService.player.status !== 2" mat-raised-button
+                  (click)="startWithRandomOpponent()">Random player</button>
+        </li>
+      </ul>
+
+      <app-opponent-field></app-opponent-field>
+  </div>
+
+  <div class="chat" *ngIf="gameService.game.status === 1">
+    <div class="chat-body">
+      <input maxlength="120" class="chat-input" [(ngModel)]="message" placeholder="Chat some message">
+      <button (click)="sendMessage(message)" mat-raised-button color="primary">Send</button>
+    </div>
+
+    <ul class="messages">
+      <li class="messages-item" *ngFor="let message of gameService.messages">
+        <span class="send-time">{{ message.split(' ')[0] }}</span>
+        {{ message.split(' ')[1] }}
+      </li>
+    </ul>
+  </div>
+
+</div>
+
+
