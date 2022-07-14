@@ -1,0 +1,28 @@
+<form class="modal" [formGroup]="form">
+  <h1 mat-dialog-title class="modal-title">{{ data.title }}</h1>
+  <div mat-dialog-content class="modal-content">
+
+    <mat-form-field class="form-field" appearance="fill">
+      <mat-label>Nickname</mat-label>
+      <input matInput #message formControlName="nickname"
+             placeholder="Enter your nickname..." maxlength="30">
+      <mat-hint align="start"><strong>Remember the nickname!</strong></mat-hint>
+      <mat-hint align="end">{{message.value.length}} / 30</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field class="form-field" appearance="fill">
+      <mat-label>Password</mat-label>
+      <input type="password" matInput formControlName="password"
+             #password placeholder="Enter your password..." maxlength="16">
+      <mat-hint align="start"><strong>Remember the password!</strong></mat-hint>
+      <mat-hint align="end">{{password.value.length}} / 16</mat-hint>
+    </mat-form-field>
+
+  </div>
+  <div mat-dialog-actions>
+    <button mat-raised-button color="primary"
+            [disabled]="form.invalid" type="button" (click)="data.func(form.value); form.reset()">{{ data.title }}</button>
+    <button mat-raised-button mat-dialog-close (click)="data.navigate()"
+            type="button">Go to {{ data.title === 'Login' ? 'Registration' : 'Login' }}</button>
+  </div>
+</form>

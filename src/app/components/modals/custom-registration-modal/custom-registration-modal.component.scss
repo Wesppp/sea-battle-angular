@@ -1,0 +1,22 @@
+.modal {
+  width: 500px;
+
+  .modal-title {
+    word-break: break-all;
+    font-weight: 500;
+  }
+
+  .modal-content {
+    display: flex;
+    flex-direction: column;
+
+    .form-field {
+      margin-top: .2rem;
+      font-size: 1.1rem;
+
+      input {
+        font-size: 1.1rem;
+      }
+    }
+  }
+}

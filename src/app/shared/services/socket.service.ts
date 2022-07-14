@@ -1,7 +1,9 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import io from "socket.io-client";
 import {Observable} from "rxjs";
 import {Field} from "../models/field";
+import {GameService} from "./game.service";
+import {HelperService} from "./helper.service";
 
 @Injectable({
   providedIn: 'root'
@@ -9,22 +11,20 @@ import {Field} from "../models/field";
 export class SocketService {
   host: string = "http://localhost:3300"
   socket: any
+  playersCount: number = 0
 
-  constructor() {
-    this.socket = io(this.host);
-    this.socket.on("connect", () => this.connected());
-    this.socket.on("disconnect", () => this.disconnected());
-    this.socket.on("error", (error: string) => {
-      console.log(`ERROR: "${error}" (${this.host})`);
-    });
+  constructor(private gameService: GameService,
+              private helperService: HelperService) {
+
   }
 
-  connect () {
+  connect() {
+    this.socket = io(this.host);
     this.socket.connect();
   }
 
-  disconnect () {
-    this.socket.disconnect();
+  disconnect() {
+    this.socket.close();
   }
 
   emit<T>(chanel: string, data?: T) {
@@ -60,5 +60,64 @@ export class SocketService {
   startGame(gameType: string, nickname: string, shipSet: Field) {
     this.emit('shipSet', {shipSet: shipSet, nickname: nickname}).subscribe()
     this.emit(gameType).subscribe()
+  }
+
+  viewEvents() {
+    this.socket.on("connect", () => this.connected());
+    this.socket.on("disconnect", () => this.disconnected());
+    this.socket.on("error", (error: string) => {
+      console.log(`ERROR: "${error}" (${this.host})`);
+    });
+
+    this.on('playersCount')
+      .subscribe(count => {
+        if (count) {
+          this.playersCount = count
+        }
+      }, error => console.log(error.message))
+
+    this.on('reconnection')
+      .subscribe(() => {
+        alert('Rec')
+      }, error => console.log(error.message))
+
+    this.on('statusChange')
+      .subscribe(status => {
+        if (status) {
+          this.gameService.game.status = this.gameService.mapGameStatus(status)
+          this.gameService.isEnd(status)
+        }
+      }, error => console.log(error.message))
+
+    this.on('turnUpdate')
+      .subscribe(isTurn => {
+        this.gameService.playerTurn = isTurn
+      }, error => console.log(error.message))
+
+    this.on('updateField')
+      .subscribe((newField: Field) => {
+        if (this.gameService.playerTurn) {
+          this.gameService.opponentField = newField
+        } else {
+          this.gameService.player.field = newField
+        }
+      }, error => console.log(error.message))
+
+    this.on('message')
+      .subscribe((message: string) => {
+        this.gameService.messages.push(message)
+      }, error => console.log(error.message))
+
+    this.on('challengeOpponent')
+      .subscribe((key: string) => {
+        this.helperService.alertMessage(`Copy the key and send it to your opponent: ${key}`)
+      }, error => console.log(error.message))
+
+    this.on('acceptingFightCall')
+      .subscribe((isCorrectKey: boolean) => {
+        if (!isCorrectKey) {
+          this.helperService.alertMessage(`The key is entered incorrectly`)
+        }
+      }, error => console.log(error.message))
   }
 }

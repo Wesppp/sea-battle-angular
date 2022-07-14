@@ -1,8 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {GameService} from "../../shared/services/game.service";
-import {Game} from "../../shared/models/game";
-import {Player} from "../../shared/models/player";
 import {SocketService} from "../../shared/services/socket.service";
+import {Player} from "../../shared/models/player";
+import {Game} from "../../shared/models/game";
+import {AuthService} from "../auth/auth.service";
+import {MatDialog} from "@angular/material/dialog";
+import {GameHistoriesModalComponent} from "../../components/modals/game-histories-modal/game-histories-modal.component";
 
 @Component({
   selector: 'app-game',
@@ -10,22 +13,18 @@ import {SocketService} from "../../shared/services/socket.service";
   styleUrls: ['./game.component.scss']
 })
 export class GameComponent implements OnInit {
-  playersCount: number = 0
   message: string = ''
 
   constructor(public gameService: GameService,
-              private socketService: SocketService) {
+              public socketService: SocketService,
+              private authService: AuthService,
+              private dialog: MatDialog) {
   }
 
   ngOnInit(): void {
-    this.createGame()
-
-    this.socketService.on('playersCount')
-      .subscribe(count => {
-        if (count) {
-          this.playersCount = count
-        }
-      }, error => console.log(error.message))
+    this.createGame(this.authService.currentUser.nickname)
+    this.socketService.connect()
+    this.socketService.viewEvents()
   }
 
   displayGameStatus(): string {
@@ -50,6 +49,7 @@ export class GameComponent implements OnInit {
   }
 
   startWithRandomOpponent() {
+    console.log(this.gameService.player)
     this.socketService.startGame('findRandomOpponent',
       this.gameService.player.nickname, this.gameService.player.field)
   }
@@ -73,14 +73,17 @@ export class GameComponent implements OnInit {
     this.socketService.emit('acceptingFightCall', key).subscribe()
   }
 
-  createGame() {
-    let name: any = prompt('Enter your name')
-    while (!name) {
-      name = prompt('Enter your name')
-    }
-
-    this.gameService.player = new Player(name);
+  createGame(userNickname: string) {
+    this.gameService.player = new Player(userNickname);
     this.gameService.game = new Game()
     this.gameService.shipsInit()
+  }
+
+  logout() {
+    this.authService.logout()
+  }
+
+  openGameHistories() {
+    this.dialog.open(GameHistoriesModalComponent)
   }
 }

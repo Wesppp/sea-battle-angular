@@ -1,5 +1,6 @@
 import {ElementRef, Injectable} from '@angular/core';
 import Swal from "sweetalert2";
+import {Observable, of} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -38,5 +39,15 @@ export class HelperService {
 
   alertMessage(message: string) {
     Swal.fire(`${message}`)
+  }
+
+  handleError<T>(operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+      this.alertMessage(error.error.text)
+
+      console.log(`${operation} failed: ${error.message}`)
+
+      return of(result as T);
+    }
   }
 }

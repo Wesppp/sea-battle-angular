@@ -1,8 +1,10 @@
+<h1>Sea battle</h1>
+
 <div class="container">
   <div class="game-status">
     <p>Status of game: <span>{{ displayGameStatus() }}</span></p>
     <p>
-      <small class="players-count">Players online : {{ playersCount }}</small>
+      <small class="players-count">Players online : {{ socketService.playersCount }}</small>
     </p>
   </div>
   <div class="game-body">
@@ -52,7 +54,16 @@
       </li>
     </ul>
   </div>
+</div>
 
+<div class="btns">
+  <button class="logout-btn" mat-fab color="primary" (click)="logout()">
+    Logout
+  </button>
+
+  <button class="histories-btn" mat-fab (click)="openGameHistories()">
+    History
+  </button>
 </div>
 
 

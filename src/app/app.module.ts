@@ -11,14 +11,27 @@ import { OpponentFieldComponent } from './components/opponent-field/opponent-fie
 import {MatButtonModule} from '@angular/material/button';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {HttpClientModule} from "@angular/common/http";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatInputModule} from '@angular/material/input';
+import { LoginPageComponent } from './pages/auth/login-page/login-page.component';
+import { GameHistoriesModalComponent } from './components/modals/game-histories-modal/game-histories-modal.component';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { ProgressSpinnerComponent } from './components/progress-spinner/progress-spinner.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatExpansionModule} from '@angular/material/expansion';
+import { CustomRegistrationModalComponent } from './components/modals/custom-registration-modal/custom-registration-modal.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     GameComponent,
     PlayerFieldComponent,
-    OpponentFieldComponent
+    OpponentFieldComponent,
+    LoginPageComponent,
+    GameHistoriesModalComponent,
+    ProgressSpinnerComponent,
+    CustomRegistrationModalComponent
   ],
   imports: [
     BrowserModule,
@@ -28,7 +41,13 @@ import {FormsModule} from "@angular/forms";
     DragDropModule,
     HttpClientModule,
     CommonModule,
-    FormsModule
+    FormsModule,
+    MatDialogModule,
+    BrowserAnimationsModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    MatProgressSpinnerModule,
+    MatExpansionModule
   ],
   providers: [],
   bootstrap: [AppComponent]
