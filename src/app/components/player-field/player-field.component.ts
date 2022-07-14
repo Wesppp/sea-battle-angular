@@ -4,12 +4,13 @@ import {
   ViewChild,
   ElementRef,
   ViewChildren,
-  QueryList, HostListener
+  QueryList, HostListener, AfterViewInit
 } from '@angular/core';
 import {GameService} from "../../shared/services/game.service";
 import {CdkDragEnd, CdkDragStart} from "@angular/cdk/drag-drop";
 import {Ship} from "../../shared/models/ship";
 import {HelperService} from "../../shared/services/helper.service";
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-player-field',
@@ -18,11 +19,12 @@ import {HelperService} from "../../shared/services/helper.service";
     '../../../assets/field.scss',
     '../../../assets/ship-size.scss']
 })
-export class PlayerFieldComponent implements OnInit {
+export class PlayerFieldComponent implements OnInit, AfterViewInit {
   @ViewChild('field') field!: ElementRef
   @ViewChildren('cell') cells!: QueryList<any>
   isDragged: boolean = false
   draggedShip!: Ship
+  isSmallScreen: boolean = false
 
   @HostListener("wheel", ["$event"]) public onScroll(event: WheelEvent) {
     if (this.isDragged) {
@@ -31,9 +33,26 @@ export class PlayerFieldComponent implements OnInit {
   }
 
   constructor(public gameService: GameService,
-              private helperService: HelperService) {}
+              private helperService: HelperService,
+              public breakpointObserver: BreakpointObserver) {}
 
   ngOnInit(): void {}
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.breakpointObserver
+        .observe(['(max-width: 870px)'])
+        .subscribe((state: BreakpointState) => {
+          if (state.matches) {
+            this.randomize()
+            this.isSmallScreen = true
+          } else {
+            this.isSmallScreen = false
+            this.gameService.resetPlayerField()
+          }
+        });
+    }, 0)
+  }
 
   dragStart($event: CdkDragStart) {
     this.isDragged = true

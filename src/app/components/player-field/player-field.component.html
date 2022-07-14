@@ -20,7 +20,7 @@
 
   <div class="reset-ref">
     <h3>Your field</h3>
-      <a *ngIf="gameService.game.status === 0" (click)="gameService.resetPlayerField()">From scratch</a>
+      <a *ngIf="gameService.game.status === 0 && !isSmallScreen" (click)="gameService.resetPlayerField()">From scratch</a>
       <a *ngIf="gameService.game.status === 0" (click)="randomize()">Random</a>
   </div>
 </div>

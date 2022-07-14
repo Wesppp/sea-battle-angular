@@ -21,6 +21,7 @@ import { ProgressSpinnerComponent } from './components/progress-spinner/progress
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { CustomRegistrationModalComponent } from './components/modals/custom-registration-modal/custom-registration-modal.component';
+import { LayoutModule } from "@angular/cdk/layout";
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { CustomRegistrationModalComponent } from './components/modals/custom-reg
     MatInputModule,
     ReactiveFormsModule,
     MatProgressSpinnerModule,
-    MatExpansionModule
+    MatExpansionModule,
+    LayoutModule
   ],
   providers: [],
   bootstrap: [AppComponent]
