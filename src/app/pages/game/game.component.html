@@ -49,8 +49,8 @@
 
     <ul class="messages">
       <li class="messages-item" *ngFor="let message of gameService.messages">
-        <span class="send-time">{{ message.split(' ')[0] }}</span>
-        {{ message.split(' ')[1] }}
+        <span class="send-time">{{ message.split(': ')[0] }}</span>
+        {{ message.split(': ')[1] }}
       </li>
     </ul>
   </div>
