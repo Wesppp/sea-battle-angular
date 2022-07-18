@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {GameService} from "../../shared/services/game.service";
 import {SocketService} from "../../shared/services/socket.service";
 import {Player} from "../../shared/models/player";
@@ -49,7 +49,6 @@ export class GameComponent implements OnInit {
   }
 
   startWithRandomOpponent() {
-    console.log(this.gameService.player)
     this.socketService.startGame('findRandomOpponent',
       this.gameService.player.nickname, this.gameService.player.field)
   }
