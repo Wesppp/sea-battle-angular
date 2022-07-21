@@ -64,7 +64,7 @@ export class GameService {
     ship.x = +cellX
     ship.y = +cellY
 
-    if (!this.shipValidation(+cellX, +cellY, ship)) return
+    if (!this.shipValidation(+cellX, +cellY, ship)) { return }
 
     this.fillShipPosition(ship)
 
@@ -75,7 +75,9 @@ export class GameService {
     if (this.player.field.ships.includes(ship)) { return }
     this.player.field.ships.push(ship)
 
-    if (this.player.field.ships.length === 10) { this.player.status = 2 }
+    if (this.player.field.ships.length === 10) {
+      this.helperService.isPlayerReady(true)
+    }
   }
 
   clearShipPosition(ship: Ship) {
@@ -112,16 +114,16 @@ export class GameService {
   }
 
   restartGame() {
-    this.resetPlayerField()
     this.opponentField = new Field()
-    this.game.status = 0
+    this.game.status = GameStatus.preparing
     this.messages = []
+    this.resetPlayerField()
   }
 
   resetPlayerField() {
     this.player.resetField()
     this.shipsInit()
-    this.player.status = 0
+    this.helperService.isPlayerReady(false)
   }
 
   randomizeField(cells: QueryList<any>, field: ElementRef) {
@@ -138,21 +140,6 @@ export class GameService {
 
         this.addShipToField(field, cellsMatrix[x][y], ship)
       }
-    }
-  }
-
-  isEnd(status: string) {
-    if (this.game.status !== 3) { return }
-
-    const isEnd = status === 'loser' || status === 'winner'
-
-    if (isEnd) {
-      if (status === 'loser') {
-        this.helperService.alertMessage("You've lost(")
-      } else {
-        this.helperService.alertMessage("You won!")
-      }
-      this.restartGame()
     }
   }
 

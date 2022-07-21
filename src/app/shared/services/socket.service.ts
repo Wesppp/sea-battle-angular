@@ -4,6 +4,8 @@ import {Observable} from "rxjs";
 import {Field} from "../models/field";
 import {GameService} from "./game.service";
 import {HelperService} from "./helper.service";
+import Swal from "sweetalert2";
+import { Clipboard } from '@angular/cdk/clipboard';
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +16,8 @@ export class SocketService {
   playersCount: number = 0
 
   constructor(private gameService: GameService,
-              private helperService: HelperService) {
-
+              private helperService: HelperService,
+              private clipboard: Clipboard) {
   }
 
   connect() {
@@ -81,14 +83,6 @@ export class SocketService {
         alert('Rec')
       }, error => console.log(error.message))
 
-    this.on('statusChange')
-      .subscribe(status => {
-        if (status) {
-          this.gameService.game.status = this.gameService.mapGameStatus(status)
-          this.gameService.isEnd(status)
-        }
-      }, error => console.log(error.message))
-
     this.on('turnUpdate')
       .subscribe(isTurn => {
         this.gameService.playerTurn = isTurn
@@ -110,7 +104,14 @@ export class SocketService {
 
     this.on('challengeOpponent')
       .subscribe((key: string) => {
-        this.helperService.alertMessage(`Copy the key and send it to your opponent: ${key}`)
+        console.log('challengeOpponent:', key)
+        this.helperService.popupWithConfirm(`Copy the key and send it to your opponent: ${key}`, 'Copy')
+          .then((result) => {
+            if (result.isConfirmed) {
+              this.clipboard.copy(key)
+              Swal.fire('You did it!', '', 'success')
+            }
+          })
       }, error => console.log(error.message))
 
     this.on('acceptingFightCall')

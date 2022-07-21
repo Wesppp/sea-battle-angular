@@ -1,25 +1,38 @@
-<form class="modal" [formGroup]="form">
+<form class="modal" [formGroup]="form" (ngSubmit)="data.func(form.value, form)">
   <h1 mat-dialog-title class="modal-title">{{ data.title }}</h1>
   <div mat-dialog-content class="modal-content">
 
     <mat-form-field class="form-field" appearance="fill">
       <mat-label>Nickname</mat-label>
-      <input matInput #message formControlName="nickname"
+      <input matInput #message formControlName="nickname" name="nickname" id="nickname"
              placeholder="Enter your nickname..." maxlength="30">
+
+      <div class="errors" *ngIf="_nickname?.invalid && (_nickname?.touched || _nickname?.dirty)">
+        <span *ngIf="_nickname?.errors?.['required']">Field is required</span>
+        <span *ngIf="_nickname?.errors?.['maxlength']">Maxlength is 30</span>
+        <span *ngIf="_nickname?.errors?.['pattern']">Enter at least 4 letters</span>
+      </div>
+
       <mat-hint align="end">{{message.value.length}} / 30</mat-hint>
     </mat-form-field>
 
     <mat-form-field class="form-field" appearance="fill">
       <mat-label>Password</mat-label>
-      <input type="password" matInput formControlName="password"
-             #password placeholder="Enter your password..." maxlength="16">
+      <input type="password" matInput formControlName="password" name="password"
+             #password placeholder="Enter your password..." id="password" maxlength="16">
+
+      <div class="errors" *ngIf="_password?.invalid && (_password?.touched || _password?.dirty)">
+        <span *ngIf="_password?.errors?.['required']">Field is required</span>
+        <span *ngIf="_password?.errors?.['minlength']">The minimum length is 4</span>
+      </div>
+
       <mat-hint align="end">{{password.value.length}} / 16</mat-hint>
     </mat-form-field>
 
   </div>
   <div mat-dialog-actions>
     <button mat-raised-button color="primary"
-            [disabled]="form.invalid" type="button" (click)="data.func(form.value); form.reset()">{{ data.title }}</button>
+            [disabled]="form.invalid" type="submit">{{ data.title }}</button>
     <button mat-raised-button mat-dialog-close (click)="data.navigate()"
             type="button">Go to {{ data.title === 'Login' ? 'Registration' : 'Login' }}</button>
   </div>

@@ -18,5 +18,15 @@
         font-size: 1.1rem;
       }
     }
+
+    .errors {
+      display: flex;
+      justify-content: flex-end;
+
+      span {
+        color: #d85252;
+        font-size: .9rem;
+      }
+    }
   }
 }

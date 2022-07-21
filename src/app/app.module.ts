@@ -22,6 +22,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { CustomRegistrationModalComponent } from './components/modals/custom-registration-modal/custom-registration-modal.component';
 import { LayoutModule } from "@angular/cdk/layout";
+import { InfiniteScrollModule } from "ngx-infinite-scroll";
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { LayoutModule } from "@angular/cdk/layout";
     ReactiveFormsModule,
     MatProgressSpinnerModule,
     MatExpansionModule,
-    LayoutModule
+    LayoutModule,
+    InfiniteScrollModule
   ],
   providers: [],
   bootstrap: [AppComponent]

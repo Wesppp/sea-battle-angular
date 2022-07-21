@@ -14,6 +14,9 @@ export class GameHistoriesModalComponent implements OnInit {
   user!: User
   isEmpty: boolean = false
   isLoading: boolean = true
+  notScroll: boolean = true
+  notEmptyHistories: boolean = true
+  paginationLoading: boolean = false
 
   constructor(private auth: AuthService,
               private userService: UserService) { }
@@ -25,10 +28,10 @@ export class GameHistoriesModalComponent implements OnInit {
 
   getGameHistories() {
     this.userService.getGameHistory(this.user._id!)
-      .subscribe(response => {
-        if (response.length && response) {
+      .subscribe(gameHistories => {
+        if (gameHistories.length && gameHistories) {
           this.isEmpty = false
-          this.gameHistories = response
+          this.gameHistories = gameHistories
           this.isLoading = false
         } else {
           this.isLoading = false
@@ -48,5 +51,27 @@ export class GameHistoriesModalComponent implements OnInit {
     }
 
     return false
+  }
+
+  onScroll() {
+    if (this.notScroll && this.notEmptyHistories) {
+      this.paginationLoading = true
+      this.notScroll = false
+      this.getNextGameHistory()
+    }
+  }
+
+  getNextGameHistory() {
+    this.userService.getGameHistoryChunk(this.user._id!, this.gameHistories[this.gameHistories.length - 1]._id!)
+      .subscribe(gameHistoryChunk => {
+        if (gameHistoryChunk.length && gameHistoryChunk) {
+          this.paginationLoading = false
+          this.gameHistories = this.gameHistories.concat(gameHistoryChunk)
+          this.notScroll = true
+        } else {
+          this.paginationLoading = false
+          this.notEmptyHistories = false
+        }
+      })
   }
 }

@@ -15,13 +15,13 @@
     <div [cdkDragData]="ship" cdkDrag [className]="ship.direction === 'row'? 'ship ship-row-'+ship.size: 'ship ship-column-'+ship.size"
          *ngFor="let ship of gameService.player.shipsArray"
          [style.left.px]="ship.left" [style.top.px]="ship.top" (cdkDragEnded)="dragEnded($event)"
-         [cdkDragDisabled]="gameService.game.status !== 0" (cdkDragStarted)="dragStart($event)"></div>
+         [cdkDragDisabled]="gameStatus !== 'preparing'" (cdkDragStarted)="dragStart($event)"></div>
   </table>
 
   <div class="reset-ref">
     <h3>Your field</h3>
-      <a *ngIf="gameService.game.status === 0 && !isSmallScreen" (click)="gameService.resetPlayerField()">From scratch</a>
-      <a *ngIf="gameService.game.status === 0" (click)="randomize()">Random</a>
+      <a *ngIf="gameStatus === 'preparing' && !isSmallScreen" (click)="gameService.resetPlayerField()">From scratch</a>
+      <a *ngIf="gameStatus === 'preparing'" (click)="randomize()">Random</a>
   </div>
 </div>
 

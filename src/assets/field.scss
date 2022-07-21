@@ -11,9 +11,6 @@
     border-collapse: collapse;
   }
 
-  tr {
-  }
-
   td {
     border: solid 1px #a8b1ff;
     height: 2em;
@@ -83,6 +80,11 @@
       z-index: 5;
       opacity: 1;
       border: 1px double red;
+    }
+
+    &.ship {
+      opacity: .7;
+      background-color: rgb(0 0 255 / 15%);
     }
   }
 }

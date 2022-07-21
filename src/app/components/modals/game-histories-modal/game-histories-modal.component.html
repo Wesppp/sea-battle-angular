@@ -4,27 +4,35 @@
     <p class="message" *ngIf="isEmpty">You haven't played any games yet</p>
     <app-progress-spinner *ngIf="isLoading"></app-progress-spinner>
 
-    <mat-accordion>
-      <mat-expansion-panel hideToggle class="tile" *ngFor="let history of gameHistories">
-        <mat-expansion-panel-header class="tile-header">
-          <mat-panel-title class="tile-title">
-            The game was played on: {{ history.gameDate }}
-          </mat-panel-title>
-        </mat-expansion-panel-header>
+    <div class="search-results"
+         infiniteScroll
+         [scrollWindow]="false"
+         [infiniteScrollDistance]="2"
+         [infiniteScrollThrottle]="50"
+         (scrolled)="onScroll()">
+      <mat-accordion class="game-history-list">
+        <mat-expansion-panel hideToggle class="tile" *ngFor="let history of gameHistories">
+          <mat-expansion-panel-header class="tile-header">
+            <mat-panel-title class="tile-title">
+              The game was played on: {{ history.gameDate }}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
 
-        <p *ngIf="checkForGameWithYourself(history)">You played this game with yourself ¯\_(ツ)_/¯</p>
+          <p *ngIf="checkForGameWithYourself(history)">You played this game with yourself ¯\_(ツ)_/¯</p>
 
-        <ul class="action-list" *ngIf="!checkForGameWithYourself(history)">
-          <li class="action" *ngFor="let action of history.actions"
-          [ngClass]="{
+          <ul class="action-list" *ngIf="!checkForGameWithYourself(history)">
+            <li class="action" *ngFor="let action of history.actions"
+                [ngClass]="{
             'right': action.nickname !== user.nickname,
             'left': action.nickname === user.nickname}">
-            <span class="action-creator">{{ action.nickname === user.nickname ? 'you' : action.nickname }}</span>:
-            <span class="action-message">{{ action.action }}</span>
-          </li>
-        </ul>
-      </mat-expansion-panel>
-    </mat-accordion>
+              <span class="action-creator">{{ action.nickname === user.nickname ? 'you' : action.nickname }}</span>:
+              <span class="action-message">{{ action.action }}</span>
+            </li>
+          </ul>
+        </mat-expansion-panel>
+        <app-progress-spinner *ngIf="paginationLoading"></app-progress-spinner>
+      </mat-accordion>
+    </div>
   </div>
 </div>
 

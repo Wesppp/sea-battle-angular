@@ -22,7 +22,8 @@ export class CustomRegistrationModalComponent implements OnInit {
     this.form = new FormGroup({
       nickname: new FormControl(this.user.nickname, [
         Validators.required,
-        Validators.maxLength(30)
+        Validators.maxLength(30),
+        Validators.pattern('(?=.*[A-Za-zА-Яа-яЁё]{4,}).*')
       ]),
       password: new FormControl(this.user.password, [
         Validators.required,
@@ -30,5 +31,13 @@ export class CustomRegistrationModalComponent implements OnInit {
         Validators.maxLength(16)
       ])
     })
+  }
+
+  get _nickname() {
+    return this.form.get('nickname')
+  }
+
+  get _password() {
+    return this.form.get('password')
   }
 }

@@ -4,4 +4,5 @@ export interface GameHistory {
   playersNicknames: string[]
   gameDate: string
   actions: Action[]
+  _id?: string
 }

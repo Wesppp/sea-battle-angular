@@ -4,13 +4,14 @@ import {
   ViewChild,
   ElementRef,
   ViewChildren,
-  QueryList, HostListener, AfterViewInit
+  QueryList, HostListener, AfterViewInit, Input
 } from '@angular/core';
 import {GameService} from "../../shared/services/game.service";
 import {CdkDragEnd, CdkDragStart} from "@angular/cdk/drag-drop";
 import {Ship} from "../../shared/models/ship";
 import {HelperService} from "../../shared/services/helper.service";
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import {GameStatus} from "../../shared/models/game-status";
 
 @Component({
   selector: 'app-player-field',
@@ -20,6 +21,7 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
     '../../../assets/ship-size.scss']
 })
 export class PlayerFieldComponent implements OnInit, AfterViewInit {
+  @Input() gameStatus!: GameStatus
   @ViewChild('field') field!: ElementRef
   @ViewChildren('cell') cells!: QueryList<any>
   isDragged: boolean = false
@@ -43,12 +45,11 @@ export class PlayerFieldComponent implements OnInit, AfterViewInit {
       this.breakpointObserver
         .observe(['(max-width: 870px)'])
         .subscribe((state: BreakpointState) => {
-          if (state.matches) {
+          if (state.matches && this.gameStatus === 'preparing') {
             this.randomize()
             this.isSmallScreen = true
           } else {
             this.isSmallScreen = false
-            this.gameService.resetPlayerField()
           }
         });
     }, 0)
@@ -66,7 +67,8 @@ export class PlayerFieldComponent implements OnInit, AfterViewInit {
 
   dragEnded($event: CdkDragEnd) {
     this.isDragged = false
-    if (this.gameService.game.status !== 0) {return}
+    if (this.gameService.game.status !== 'preparing') {return}
+
     const {data: ship} = $event.source
     const shipElement = $event.source.element.nativeElement
     let cells = this.cells.toArray()

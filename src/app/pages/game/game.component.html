@@ -8,40 +8,52 @@
     </p>
   </div>
   <div class="game-body">
-    <app-player-field></app-player-field>
+    <app-player-field [gameStatus]="gameStatus"></app-player-field>
 
     <ng-template #annunciator>
       <div class="while-game">
-        <p class="annunciator" *ngIf="gameService.game.status === 1">
-          {{gameService.playerTurn ? 'Your turn': "Opponent's turn"}}
+        <p class="annunciator" *ngIf="gameStatus === 'started'">
+          {{gameService.playerTurn ? 'Your turn' : "Opponent's turn"}}
         </p>
 
-        <button *ngIf="gameService.game.status === 1" mat-raised-button
-                (click)="giveUp()">Give up</button>
+        <button *ngIf="gameStatus === 'started'" mat-raised-button
+                (click)="giveUp()">Give up
+        </button>
+
+        <button *ngIf="gameStatus === 'finished'" (click)="playAgain()"
+                mat-raised-button>Play again
+        </button>
+
+        <button *ngIf="gameStatus === 'waiting_for_opponent'" (click)="cancelGame()"
+                mat-raised-button>Cancel the game
+        </button>
       </div>
     </ng-template>
 
-      <ul class="options" *ngIf="gameService.game.status === 0; else annunciator" >
-        <li>
-          <button [disabled]="gameService.player.status !== 2" mat-raised-button
-                  (click)="callForFight()">Сall for a fight</button>
-        </li>
+    <ul class="options" *ngIf="gameStatus === 'preparing'; else annunciator">
+      <li>
+        <button [disabled]="!isPlayerReady" mat-raised-button
+                (click)="callForFight()">Сall for a fight
+        </button>
+      </li>
 
-        <li>
-          <button [disabled]="gameService.player.status !== 2" mat-raised-button
-                  (click)="takeChallenge()">Take the challenge</button>
-        </li>
+      <li>
+        <button [disabled]="!isPlayerReady" mat-raised-button
+                (click)="takeChallenge()">Take the challenge
+        </button>
+      </li>
 
-        <li>
-          <button [disabled]="gameService.player.status !== 2" mat-raised-button
-                  (click)="startWithRandomOpponent()">Random player</button>
-        </li>
-      </ul>
+      <li>
+        <button [disabled]="!isPlayerReady" mat-raised-button
+                (click)="startWithRandomOpponent()">Random player
+        </button>
+      </li>
+    </ul>
 
-      <app-opponent-field></app-opponent-field>
+    <app-opponent-field></app-opponent-field>
   </div>
 
-  <div class="chat" *ngIf="gameService.game.status === 1">
+  <div class="chat" *ngIf="gameStatus === 'started'">
     <div class="chat-body">
       <input maxlength="120" class="chat-input" [(ngModel)]="message" placeholder="Chat some message">
       <button (click)="sendMessage(message)" mat-raised-button color="primary">Send</button>

@@ -1,6 +1,6 @@
 import {ElementRef, Injectable} from '@angular/core';
 import Swal from "sweetalert2";
-import {Observable, of} from "rxjs";
+import {BehaviorSubject, Observable, of} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +8,13 @@ import {Observable, of} from "rxjs";
 export class HelperService {
 
   constructor() { }
+
+  providePlayerStatus = new BehaviorSubject<boolean>(false);
+  playerStatusObservable$ = this.providePlayerStatus.asObservable();
+
+  isPlayerReady(isReady: boolean) {
+    this.providePlayerStatus.next(isReady)
+  }
 
   inField(x: number, y: number) {
     return 0 <= x && x < 10 && 0 <= y && y < 10
@@ -39,6 +46,15 @@ export class HelperService {
 
   alertMessage(message: string) {
     Swal.fire(`${message}`)
+  }
+
+  popupWithConfirm(title: string, buttonText: string) {
+    return Swal.fire({
+      title: `${title}`,
+      showConfirmButton: true,
+      confirmButtonText: `${buttonText}`,
+      allowOutsideClick: false
+    })
   }
 
   handleError<T>(operation = 'operation', result?: T) {

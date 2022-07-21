@@ -45,6 +45,13 @@ export class UserService {
     )
   }
 
+  getGameHistoryChunk(userId: string, lastHistoryId: string): Observable<GameHistory[]> {
+    const url = `${this.userUrl}/getGameHistoryChunk/${userId}/${lastHistoryId}`
+    return this.http.get<GameHistory[]>(url).pipe(
+      catchError(this.helperService.handleError<GameHistory[]>("get game history chunk"))
+    )
+  }
+
   httpOptions = {
     headers: new HttpHeaders({ "Accept": "application/json", "Content-Type": "application/json" })
   };

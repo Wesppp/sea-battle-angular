@@ -6,6 +6,7 @@ import {AuthService} from "../auth.service";
 import {
   CustomRegistrationModalComponent
 } from "../../../components/modals/custom-registration-modal/custom-registration-modal.component";
+import {FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-login-page',
@@ -23,27 +24,30 @@ export class LoginPageComponent implements OnInit {
   }
 
   openLoginDialog = () => {
+    this.dialog.closeAll()
     this.dialog.open(CustomRegistrationModalComponent, {
       data: {
         title: 'Login',
-        navigate: this.toRegistration,
+        navigate: this.openRegistrationDialog,
         func: this.login
       },
       disableClose: true
     }, );
   }
 
-  login = (user: User) => {
+  login = (user: User, form: FormGroup) => {
     this.userService.loginUser(user)
       .subscribe(response => {
         if (response) {
           this.dialog.closeAll()
+          form.reset()
           this.authService.login(response)
         }
       }, error => console.log(error.message))
   }
 
-  toRegistration = () => {
+  openRegistrationDialog = () => {
+    this.dialog.closeAll()
     this.dialog.open(CustomRegistrationModalComponent, {
       data: {
         title: 'Registration',
@@ -54,10 +58,11 @@ export class LoginPageComponent implements OnInit {
     })
   }
 
-  registration = (user: User) => {
+  registration = (user: User, form: FormGroup) => {
     this.userService.registrationUser(user)
       .subscribe(response => {
         if (response) {
+          form.reset()
           this.openLoginDialog()
         }
       }, error => console.log(error.message))
