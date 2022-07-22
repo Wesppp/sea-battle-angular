@@ -12,6 +12,8 @@ import {Ship} from "../../shared/models/ship";
 import {HelperService} from "../../shared/services/helper.service";
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import {GameStatus} from "../../shared/models/game-status";
+import {Cell} from "../../shared/models/cell";
+import {Player} from "../../shared/models/player";
 
 @Component({
   selector: 'app-player-field',
@@ -88,5 +90,9 @@ export class PlayerFieldComponent implements OnInit, AfterViewInit {
 
   randomize() {
     this.gameService.randomizeField(this.cells, this.field)
+  }
+
+  get player(): Player {
+    return this.gameService.player
   }
 }

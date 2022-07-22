@@ -1,6 +1,6 @@
 <div class="field">
   <table class="field-grid" #field>
-    <tr *ngFor="let row of gameService.player.field.shots; let i = index">
+    <tr *ngFor="let row of player.field.shots; let i = index">
       <td class="cell" *ngFor="let cell of row; let j = index" #cell [attr.data-x]="cell.x" [attr.data-y]="cell.y"
           [ngClass]="{
           'hit': cell.status === 4,
@@ -13,7 +13,7 @@
     </tr>
 
     <div [cdkDragData]="ship" cdkDrag [className]="ship.direction === 'row'? 'ship ship-row-'+ship.size: 'ship ship-column-'+ship.size"
-         *ngFor="let ship of gameService.player.shipsArray"
+         *ngFor="let ship of player.shipsArray"
          [style.left.px]="ship.left" [style.top.px]="ship.top" (cdkDragEnded)="dragEnded($event)"
          [cdkDragDisabled]="gameStatus !== 'preparing'" (cdkDragStarted)="dragStart($event)"></div>
   </table>

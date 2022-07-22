@@ -2,6 +2,7 @@ import {Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren} from 
 import {GameService} from "../../shared/services/game.service";
 import {Cell} from "../../shared/models/cell";
 import {SocketService} from "../../shared/services/socket.service";
+import {Field} from "../../shared/models/field";
 
 @Component({
   selector: 'app-opponent-field',
@@ -19,7 +20,8 @@ export class OpponentFieldComponent implements OnInit {
 
   ngOnInit(): void {
     this.socketService.on('showShips')
-      .subscribe(() => {
+      .subscribe(field => {
+        this.gameService.opponentField = field
         this.showShips = true
       })
   }
@@ -30,5 +32,9 @@ export class OpponentFieldComponent implements OnInit {
     if (cell.status === 4 || cell.status === 3) return
 
     this.socketService.emit('addShot', {x: cell.x, y: cell.y}).subscribe()
+  }
+
+  get opponentField(): Field {
+    return this.gameService.opponentField
   }
 }
