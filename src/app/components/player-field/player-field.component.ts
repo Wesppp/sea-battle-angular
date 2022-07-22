@@ -36,7 +36,7 @@ export class PlayerFieldComponent implements OnInit, AfterViewInit {
     }
   }
 
-  constructor(public gameService: GameService,
+  constructor(private gameService: GameService,
               private helperService: HelperService,
               public breakpointObserver: BreakpointObserver) {}
 
@@ -94,5 +94,9 @@ export class PlayerFieldComponent implements OnInit, AfterViewInit {
 
   get player(): Player {
     return this.gameService.player
+  }
+
+  resetPlayerField() {
+    this.gameService.resetPlayerField()
   }
 }

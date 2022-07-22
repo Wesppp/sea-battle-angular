@@ -15,7 +15,7 @@ export class OpponentFieldComponent implements OnInit {
   @ViewChildren('cell') cells!: QueryList<any>
   showShips: boolean = false
 
-  constructor(public gameService: GameService,
+  constructor(private gameService: GameService,
               private socketService: SocketService) {}
 
   ngOnInit(): void {
