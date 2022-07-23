@@ -71,6 +71,14 @@ export class SocketService {
       console.log(`ERROR: "${error}" (${this.host})`);
     });
 
+    this.on('statusChange')
+      .subscribe(status => {
+        if (status) {
+          this.gameService.game.status = this.gameService.mapGameStatus(status)
+          this.gameService.isEnd(status)
+        }
+      }, error => console.log(error.message))
+
     this.on('playersCount')
       .subscribe(count => {
         if (count) {

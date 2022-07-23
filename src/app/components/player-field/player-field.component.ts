@@ -23,7 +23,6 @@ import {Player} from "../../shared/models/player";
     '../../../assets/ship-size.scss']
 })
 export class PlayerFieldComponent implements OnInit, AfterViewInit {
-  @Input() gameStatus!: GameStatus
   @ViewChild('field') field!: ElementRef
   @ViewChildren('cell') cells!: QueryList<any>
   isDragged: boolean = false
@@ -98,5 +97,9 @@ export class PlayerFieldComponent implements OnInit, AfterViewInit {
 
   resetPlayerField() {
     this.gameService.resetPlayerField()
+  }
+
+  get gameStatus(): GameStatus {
+    return this.gameService.game.status
   }
 }

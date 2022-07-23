@@ -156,4 +156,18 @@ export class GameService {
         return GameStatus.preparing
     }
   }
+
+  isEnd(status: string) {
+    if (this.game.status !== 'finished') { return }
+
+    const isEnd = status === 'loser' || status === 'winner'
+
+    if (isEnd) {
+      if (status === 'loser') {
+        this.helperService.alertMessage("You've lost(")
+      } else {
+        this.helperService.alertMessage("You won!")
+      }
+    }
+  }
 }

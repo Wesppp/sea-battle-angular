@@ -16,7 +16,6 @@ import {HelperService} from "../../shared/services/helper.service";
 })
 export class GameComponent implements OnInit {
   message: string = ''
-  gameStatus!: GameStatus
   isPlayerReady: boolean = false
 
   constructor(public gameService: GameService,
@@ -30,16 +29,6 @@ export class GameComponent implements OnInit {
     this.createGame(this.authService.currentUser.nickname)
     this.socketService.connect()
     this.socketService.viewEvents()
-    this.gameStatus = GameStatus.preparing
-
-    this.socketService.on('statusChange')
-      .subscribe(status => {
-        if (status) {
-          this.gameService.game.status = this.gameService.mapGameStatus(status)
-          this.gameStatus = this.gameService.game.status
-          this.isEnd(status)
-        }
-      }, error => console.log(error.message))
 
     this.helperService.playerStatusObservable$
       .subscribe(isReady => {
@@ -104,28 +93,16 @@ export class GameComponent implements OnInit {
     this.dialog.open(GameHistoriesModalComponent)
   }
 
-  isEnd(status: string) {
-    if (this.gameStatus !== 'finished') { return }
-
-    const isEnd = status === 'loser' || status === 'winner'
-
-    if (isEnd) {
-      if (status === 'loser') {
-        this.helperService.alertMessage("You've lost(")
-      } else {
-        this.helperService.alertMessage("You won!")
-      }
-    }
-  }
-
   playAgain() {
-    this.gameStatus = GameStatus.preparing
     this.gameService.restartGame()
   }
 
   cancelGame() {
     this.socketService.emit('cancelGame').subscribe()
-    this.gameStatus = GameStatus.preparing
     this.gameService.game.status = GameStatus.preparing
+  }
+
+  get gameStatus(): GameStatus {
+    return this.gameService.game.status
   }
 }
