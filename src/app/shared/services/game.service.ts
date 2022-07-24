@@ -28,6 +28,7 @@ export class GameService {
   opponentField: Field = new Field()
   playerTurn: boolean = false
   messages: string[] = []
+  isPlayerReady: boolean = false
 
   constructor(private helperService: HelperService) {
   }
@@ -76,7 +77,7 @@ export class GameService {
     this.player.field.ships.push(ship)
 
     if (this.player.field.ships.length === 10) {
-      this.helperService.isPlayerReady(true)
+      this.isPlayerReady = true
     }
   }
 
@@ -123,7 +124,7 @@ export class GameService {
   resetPlayerField() {
     this.player.resetField()
     this.shipsInit()
-    this.helperService.isPlayerReady(false)
+    this.isPlayerReady = false
   }
 
   randomizeField(cells: QueryList<any>, field: ElementRef) {

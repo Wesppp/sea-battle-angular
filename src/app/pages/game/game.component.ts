@@ -16,24 +16,17 @@ import {HelperService} from "../../shared/services/helper.service";
 })
 export class GameComponent implements OnInit {
   message: string = ''
-  isPlayerReady: boolean = false
 
   constructor(public gameService: GameService,
               public socketService: SocketService,
               private authService: AuthService,
-              private dialog: MatDialog,
-              private helperService: HelperService) {
+              private dialog: MatDialog) {
   }
 
   ngOnInit(): void {
     this.createGame(this.authService.currentUser.nickname)
     this.socketService.connect()
     this.socketService.viewEvents()
-
-    this.helperService.playerStatusObservable$
-      .subscribe(isReady => {
-        this.isPlayerReady = isReady
-      })
   }
 
   displayGameStatus(): string {
@@ -104,5 +97,9 @@ export class GameComponent implements OnInit {
 
   get gameStatus(): GameStatus {
     return this.gameService.game.status
+  }
+
+  get isPlayerReady(): boolean {
+    return this.gameService.isPlayerReady
   }
 }

@@ -9,13 +9,6 @@ export class HelperService {
 
   constructor() { }
 
-  providePlayerStatus = new BehaviorSubject<boolean>(false);
-  playerStatusObservable$ = this.providePlayerStatus.asObservable();
-
-  isPlayerReady(isReady: boolean) {
-    this.providePlayerStatus.next(isReady)
-  }
-
   inField(x: number, y: number) {
     return 0 <= x && x < 10 && 0 <= y && y < 10
   }
