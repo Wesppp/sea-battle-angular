@@ -4,15 +4,14 @@ import {
   ViewChild,
   ElementRef,
   ViewChildren,
-  QueryList, HostListener, AfterViewInit, Input
+  QueryList, HostListener, AfterViewInit
 } from '@angular/core';
 import {GameService} from "../../shared/services/game.service";
 import {CdkDragEnd, CdkDragStart} from "@angular/cdk/drag-drop";
 import {Ship} from "../../shared/models/ship";
 import {HelperService} from "../../shared/services/helper.service";
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import {GameStatus} from "../../shared/models/game-status";
-import {Cell} from "../../shared/models/cell";
+import {GameStatus} from "../../shared/enums/game-status";
 import {Player} from "../../shared/models/player";
 
 @Component({
@@ -48,9 +47,6 @@ export class PlayerFieldComponent implements OnInit, AfterViewInit {
         .subscribe((state: BreakpointState) => {
           if (state.matches && this.gameStatus === 'preparing') {
             this.randomize()
-            this.isSmallScreen = true
-          } else {
-            this.isSmallScreen = false
           }
         });
     }, 0)

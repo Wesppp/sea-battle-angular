@@ -6,6 +6,10 @@
     <p>
       <small class="players-count">Players online : {{ socketService.playersCount }}</small>
     </p>
+
+    <p class="opponent-nickname" *ngIf="opponentNickname">
+      You play with <span>{{ opponentNickname }}</span>
+    </p>
   </div>
   <div class="game-body">
     <app-player-field></app-player-field>
@@ -53,29 +57,9 @@
     <app-opponent-field></app-opponent-field>
   </div>
 
-  <div class="chat" *ngIf="gameStatus === 'started'">
-    <div class="chat-body">
-      <input maxlength="120" class="chat-input" [(ngModel)]="message" placeholder="Chat some message">
-      <button (click)="sendMessage(message)" mat-raised-button color="primary">Send</button>
-    </div>
-
-    <ul class="messages">
-      <li class="messages-item" *ngFor="let message of gameService.messages">
-        <span class="send-time">{{ message.split(': ')[0] }}</span>
-        {{ message.split(': ')[1] }}
-      </li>
-    </ul>
-  </div>
+  <app-chat></app-chat>
 </div>
 
-<div class="menu">
-  <button class="logout-btn" mat-fab color="primary" (click)="logout()">
-    Logout
-  </button>
-
-  <button class="history-btn" mat-fab (click)="openGameHistories()">
-    History
-  </button>
-</div>
+<app-navigation></app-navigation>
 
 

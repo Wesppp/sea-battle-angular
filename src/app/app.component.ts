@@ -1,5 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AuthService} from "./pages/auth/auth.service";
+import {Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -9,10 +8,9 @@ import {AuthService} from "./pages/auth/auth.service";
 export class AppComponent implements OnInit {
   title = 'sea-battle-angular';
 
-  constructor(private auth: AuthService) {
+  constructor() {
   }
 
   ngOnInit() {
-    this.auth.checkLoginStatus()
   }
 }

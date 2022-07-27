@@ -2,9 +2,11 @@ import {ElementRef, Injectable, QueryList} from '@angular/core';
 import {Game} from "../models/game";
 import {Player} from "../models/player";
 import {Ship} from "../models/ship";
-import {GameStatus} from "../models/game-status";
+import {GameStatus} from "../enums/game-status";
 import {HelperService} from "./helper.service";
 import {Field} from "../models/field";
+import {CellStatus} from "../enums/cell-status";
+import {PlayerStatus} from "../enums/player-status";
 
 @Injectable({
   providedIn: 'root'
@@ -25,10 +27,12 @@ export class GameService {
 
   game!: Game
   player!: Player
-  opponentField: Field = new Field()
-  playerTurn: boolean = false
   messages: string[] = []
+  opponentField: Field = new Field()
+  opponentNickname: string = ''
+  playerTurn: boolean = false
   isPlayerReady: boolean = false
+  showOpponentShips: boolean = false
 
   constructor(private helperService: HelperService) {
   }
@@ -49,7 +53,7 @@ export class GameService {
       let cy = y + dy * i
 
       if (this.helperService.inField(cx, cy)) {
-        if (this.player.field.shots[cx][cy].status !== 1) return false
+        if (this.player.field.shots[cx][cy].status !== 'free') return false
       } else {
         return false
       }
@@ -65,7 +69,9 @@ export class GameService {
     ship.x = +cellX
     ship.y = +cellY
 
-    if (!this.shipValidation(+cellX, +cellY, ship)) { return }
+    if (!this.shipValidation(+cellX, +cellY, ship)) {
+      return
+    }
 
     this.fillShipPosition(ship)
 
@@ -73,7 +79,9 @@ export class GameService {
     ship.top = cellRect.top - fieldRect.top
     ship.placed = true
 
-    if (this.player.field.ships.includes(ship)) { return }
+    if (this.player.field.ships.includes(ship)) {
+      return
+    }
     this.player.field.ships.push(ship)
 
     if (this.player.field.ships.length === 10) {
@@ -89,7 +97,7 @@ export class GameService {
       for (let x = ship.x - 1; x < +ship.x + ship.size * dx + dy + 1; x++) {
         for (let y = ship.y - 1; y < ship.y + ship.size * dy + dx + 1; y++) {
           if (this.helperService.inField(x, y)) {
-            this.player.field.shots[x][y].status = 1
+            this.player.field.shots[x][y].status = CellStatus.free
           }
         }
       }
@@ -103,13 +111,13 @@ export class GameService {
     for (let x = ship.x - 1; x < ship.x + ship.size * dx + dy + 1; x++) {
       for (let y = ship.y - 1; y < ship.y + ship.size * dy + dx + 1; y++) {
         if (this.helperService.inField(x, y)) {
-          this.player.field.shots[x][y].status = 0
+          this.player.field.shots[x][y].status = CellStatus.closed
         }
       }
     }
 
     for (let i = 0; i < ship.size; i++) {
-      this.player.field.shots[ship.x + dx * i][ship.y + dy * i].status = 2
+      this.player.field.shots[ship.x + dx * i][ship.y + dy * i].status = CellStatus.ship
       this.player.field.shots[ship.x + dx * i][ship.y + dy * i].ship = ship
     }
   }
@@ -119,6 +127,8 @@ export class GameService {
     this.game.status = GameStatus.preparing
     this.messages = []
     this.resetPlayerField()
+    this.showOpponentShips = false
+    this.opponentNickname = ''
   }
 
   resetPlayerField() {
@@ -131,7 +141,7 @@ export class GameService {
     this.resetPlayerField()
     let cellsMatrix = this.helperService.convMatrix(cells.toArray(), 10)
 
-    for(let i = 0; i < 10; i++) {
+    for (let i = 0; i < 10; i++) {
       const ship = this.player.shipsArray[i]
       ship.direction = this.helperService.getRandomFrom(["row", "column"])
 
@@ -158,17 +168,26 @@ export class GameService {
     }
   }
 
+  mapPlayerStatus(status: string): PlayerStatus {
+    switch (status) {
+      case 'loser':
+        return PlayerStatus.loser;
+      case 'winner':
+        return PlayerStatus.winner;
+      default:
+        return PlayerStatus.none
+    }
+  }
+
   isEnd(status: string) {
     if (this.game.status !== 'finished') { return }
 
-    const isEnd = status === 'loser' || status === 'winner'
+    this.player.status = this.mapPlayerStatus(status)
 
-    if (isEnd) {
-      if (status === 'loser') {
-        this.helperService.alertMessage("You've lost(")
-      } else {
-        this.helperService.alertMessage("You won!")
-      }
+    if (this.player.status === 'loser') {
+      this.helperService.alertMessage("You've lost(")
+    } else {
+      this.helperService.alertMessage("You won!")
     }
   }
 }

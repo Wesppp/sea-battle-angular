@@ -9,7 +9,6 @@ import { JwtHelperService } from "@auth0/angular-jwt";
   providedIn: 'root'
 })
 export class AuthService {
-  currentUser!: User
   helper = new JwtHelperService();
 
   constructor(private router: Router,
@@ -17,7 +16,6 @@ export class AuthService {
   }
 
   login(response: any) {
-    this.currentUser = response.signed_user
     this.router.navigate(['/game'])
     localStorage.setItem('token', response.token)
   }
@@ -28,8 +26,7 @@ export class AuthService {
     localStorage.removeItem('token');
   }
 
-  public get logIn(): boolean {
-    this.checkLoginStatus()
+  public get isLoggedIn(): boolean {
     return (localStorage.getItem('token') !== null)
   }
 
@@ -37,15 +34,7 @@ export class AuthService {
     return localStorage.getItem('token')
   }
 
-  checkLoginStatus() {
-    try {
-      let token = this.getJwtToken()
-      this.currentUser = jwt_decode(token!)
-      if (this.helper.isTokenExpired(token!)) {
-        localStorage.removeItem('token');
-      }
-    } catch (e) {
-      console.log(e)
-    }
+  get currentUser(): User {
+    return jwt_decode(this.getJwtToken()!) || null
   }
 }

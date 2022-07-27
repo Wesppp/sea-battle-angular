@@ -1,10 +1,13 @@
 <div class="field">
+  <div class="hint" *ngIf="gameStatus === 'preparing'">
+    use the mouse wheel when the ship is over the field<br> to change its direction
+  </div>
   <table class="field-grid" #field>
     <tr *ngFor="let row of player.field.shots; let i = index">
       <td class="cell" *ngFor="let cell of row; let j = index" #cell [attr.data-x]="cell.x" [attr.data-y]="cell.y"
           [ngClass]="{
-          'hit': cell.status === 4,
-          'miss': cell.status === 3,
+          'hit': cell.status === 'hit',
+          'miss': cell.status === 'miss',
           'killed': cell?.ship?.killed
           }">
         <div class="marker marker-column" *ngIf="i === 0">{{ 'ABCDEEFGHI'[j] }}</div>
@@ -20,8 +23,8 @@
 
   <div class="reset-ref">
     <h3>Your field</h3>
-      <a *ngIf="gameStatus === 'preparing' && !isSmallScreen" (click)="resetPlayerField()">From scratch</a>
-      <a *ngIf="gameStatus === 'preparing'" (click)="randomize()">Random</a>
+    <a *ngIf="gameStatus === 'preparing' && !isSmallScreen" (click)="resetPlayerField()">From scratch</a>
+    <a *ngIf="gameStatus === 'preparing'" (click)="randomize()">Random</a>
   </div>
 </div>
 

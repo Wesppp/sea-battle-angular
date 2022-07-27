@@ -4,10 +4,10 @@ import {SocketService} from "../../shared/services/socket.service";
 import {Player} from "../../shared/models/player";
 import {Game} from "../../shared/models/game";
 import {AuthService} from "../auth/auth.service";
+import {GameStatus} from 'src/app/shared/enums/game-status';
 import {MatDialog} from "@angular/material/dialog";
-import {GameHistoriesModalComponent} from "../../components/modals/game-histories-modal/game-histories-modal.component";
-import {GameStatus} from 'src/app/shared/models/game-status';
-import {HelperService} from "../../shared/services/helper.service";
+import {InsertingKeyModalComponent} from "../../components/modals/inserting-key-modal/inserting-key-modal.component";
+import {BattleService} from "../../shared/services/battle.service";
 
 @Component({
   selector: 'app-game',
@@ -15,18 +15,19 @@ import {HelperService} from "../../shared/services/helper.service";
   styleUrls: ['./game.component.scss']
 })
 export class GameComponent implements OnInit {
-  message: string = ''
 
   constructor(public gameService: GameService,
               public socketService: SocketService,
               private authService: AuthService,
-              private dialog: MatDialog) {
+              private dialog: MatDialog,
+              private battleService: BattleService) {
   }
 
   ngOnInit(): void {
     this.createGame(this.authService.currentUser.nickname)
     this.socketService.connect()
     this.socketService.viewEvents()
+    this.battleService.viewBattleEvents()
   }
 
   displayGameStatus(): string {
@@ -46,12 +47,12 @@ export class GameComponent implements OnInit {
   }
 
   callForFight() {
-    this.socketService.startGame('challengeOpponent',
+    this.battleService.startGame('challengeOpponent',
       this.gameService.player.nickname, this.gameService.player.field)
   }
 
   startWithRandomOpponent() {
-    this.socketService.startGame('findRandomOpponent',
+    this.battleService.startGame('findRandomOpponent',
       this.gameService.player.nickname, this.gameService.player.field)
   }
 
@@ -59,31 +60,14 @@ export class GameComponent implements OnInit {
     this.socketService.emit('giveup').subscribe()
   }
 
-  sendMessage(message: string) {
-    if (!message) { return }
-    this.socketService.emit('message', message).subscribe()
-    this.message = ''
-  }
-
   takeChallenge() {
-    const key = prompt('Enter the game key')
-    this.socketService.emit('shipSet',
-      {shipSet: this.gameService.player.field, nickname: this.gameService.player.nickname}).subscribe()
-    this.socketService.emit('acceptingFightCall', key).subscribe()
+    this.dialog.open(InsertingKeyModalComponent)
   }
 
   createGame(userNickname: string) {
     this.gameService.player = new Player(userNickname);
     this.gameService.game = new Game()
     this.gameService.shipsInit()
-  }
-
-  logout() {
-    this.authService.logout()
-  }
-
-  openGameHistories() {
-    this.dialog.open(GameHistoriesModalComponent)
   }
 
   playAgain() {
@@ -101,5 +85,9 @@ export class GameComponent implements OnInit {
 
   get isPlayerReady(): boolean {
     return this.gameService.isPlayerReady
+  }
+
+  get opponentNickname(): string {
+    return this.gameService.opponentNickname
   }
 }

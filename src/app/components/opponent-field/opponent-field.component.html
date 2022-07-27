@@ -3,9 +3,9 @@
     <tr *ngFor="let row of opponentField.shots; let i = index">
       <td class="cell" *ngFor="let cell of row; let j = index" (click)="makeShot(cell)"
           [ngClass]="{
-          'ship': showShips && cell.status === 2,
-          'hit': cell.status === 4,
-          'miss': cell.status === 3,
+          'ship': showOpponentShips && cell.status === 'ship',
+          'hit': cell.status === 'hit',
+          'miss': cell.status === 'miss',
           'killed': cell?.ship?.killed
           }">
         <div class="marker marker-column" *ngIf="i === 0">{{ 'ABCDEEFGHI'[j] }}</div>

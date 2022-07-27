@@ -1,0 +1,28 @@
+.menu {
+  .logout-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.2rem;
+    width: 72px;
+    height: 72px;
+  }
+
+  .history-btn {
+    position: absolute;
+    top: 1rem;
+    right: 6rem;
+    font-size: 1.2rem;
+    width: 72px;
+    height: 72px;
+  }
+}
+
+@media (max-width: 870px) {
+  .menu {
+    .history-btn {
+      top: 6rem;
+      right: 1rem;
+    }
+  }
+}

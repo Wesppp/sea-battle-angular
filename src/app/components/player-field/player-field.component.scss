@@ -1,27 +1,39 @@
-table {
+.field {
   position: relative;
-}
 
-.ship {
-  z-index: 2;
-  border: 2px solid #00f;
-  background: rgb(0 0 255 / 15%);
-  position: absolute !important;
-  margin: -2px;
-}
+  table {
+    position: relative;
+  }
 
-.reset-ref {
-  color: yellow;
-  margin-left: 0.5rem;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
+  .ship {
+    z-index: 2;
+    border: 2px solid #00f;
+    background: rgb(0 0 255 / 15%);
+    position: absolute !important;
+    margin: -2px;
+  }
 
-  a {
-    text-decoration: underline;
-    font-size: 1rem;
-    cursor: pointer;
+  .reset-ref {
+    color: yellow;
+    margin-left: 0.5rem;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    a {
+      text-decoration: underline;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+  }
+
+  .hint {
+    color: #ffffffe6;
+    position: absolute;
+    top: -66px;
+    left: 0;
   }
 }
+
 
 

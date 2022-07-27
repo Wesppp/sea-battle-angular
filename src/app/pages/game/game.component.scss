@@ -48,45 +48,10 @@
     span {
       color: yellow;
     }
-  }
 
-  .chat {
-    display: flex;
-    margin-top: 1rem;
-    flex-direction: column;
-    padding: 0 1rem;
-
-    .chat-input {
-      width: 90%;
-      font-size: 1.2rem;
-      border: 2px double #5080ff;
-      border-radius: 5px;
-      outline: none;
-      padding: 0.3rem 0.6rem
-    }
-
-    button {
-      margin-left: .2rem;
-    }
-
-    .chat-body {
-      display: flex;
-      align-items: center;
-    }
-
-    ul {
-      list-style-type: none;
-      font-size: 1.2rem;
-      color: white;
-      height: 150px;
-      overflow: auto;
-
-      li {
-        margin: 0.5rem 0;
-
-        .send-time {
-          color: yellow;
-        }
+    .opponent-nickname {
+      span {
+        color: yellow;
       }
     }
   }
@@ -99,26 +64,6 @@ h1 {
   padding-top: 2rem;
   font-weight: 600;
   letter-spacing: .03em;
-}
-
-.menu {
-  .logout-btn {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    font-size: 1.2rem;
-    width: 72px;
-    height: 72px;
-  }
-
-  .history-btn {
-    position: absolute;
-    top: 1rem;
-    right: 6rem;
-    font-size: 1.2rem;
-    width: 72px;
-    height: 72px;
-  }
 }
 
 @media (max-width: 870px) {

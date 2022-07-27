@@ -1,27 +1,26 @@
 import {Injectable} from '@angular/core';
 import io from "socket.io-client";
 import {Observable} from "rxjs";
-import {Field} from "../models/field";
 import {GameService} from "./game.service";
 import {HelperService} from "./helper.service";
-import Swal from "sweetalert2";
-import { Clipboard } from '@angular/cdk/clipboard';
+import { environment } from "../../../environments/environment";
+import {MatDialog} from "@angular/material/dialog";
+import {GameKeyComponent} from "../../components/modals/game-key-modal/game-key.component";
 
 @Injectable({
   providedIn: 'root'
 })
 export class SocketService {
-  host: string = "http://localhost:3300"
   socket: any
   playersCount: number = 0
 
   constructor(private gameService: GameService,
               private helperService: HelperService,
-              private clipboard: Clipboard) {
+              private dialog: MatDialog) {
   }
 
   connect() {
-    this.socket = io(this.host);
+    this.socket = io(environment.serverUrl);
     this.socket.connect();
   }
 
@@ -59,16 +58,11 @@ export class SocketService {
     console.log('Disconnected');
   }
 
-  startGame(gameType: string, nickname: string, shipSet: Field) {
-    this.emit('shipSet', {shipSet: shipSet, nickname: nickname}).subscribe()
-    this.emit(gameType).subscribe()
-  }
-
   viewEvents() {
     this.socket.on("connect", () => this.connected());
     this.socket.on("disconnect", () => this.disconnected());
     this.socket.on("error", (error: string) => {
-      console.log(`ERROR: "${error}" (${this.host})`);
+      console.log(`ERROR: "${error}" (${environment.serverUrl})`);
     });
 
     this.on('statusChange')
@@ -86,25 +80,6 @@ export class SocketService {
         }
       }, error => console.log(error.message))
 
-    this.on('reconnection')
-      .subscribe(() => {
-        alert('Rec')
-      }, error => console.log(error.message))
-
-    this.on('turnUpdate')
-      .subscribe(isTurn => {
-        this.gameService.playerTurn = isTurn
-      }, error => console.log(error.message))
-
-    this.on('updateField')
-      .subscribe((newField: Field) => {
-        if (this.gameService.playerTurn) {
-          this.gameService.opponentField = newField
-        } else {
-          this.gameService.player.field = newField
-        }
-      }, error => console.log(error.message))
-
     this.on('message')
       .subscribe((message: string) => {
         this.gameService.messages.push(message)
@@ -112,14 +87,7 @@ export class SocketService {
 
     this.on('challengeOpponent')
       .subscribe((key: string) => {
-        console.log('challengeOpponent:', key)
-        this.helperService.popupWithConfirm(`Copy the key and send it to your opponent: ${key}`, 'Copy')
-          .then((result) => {
-            if (result.isConfirmed) {
-              this.clipboard.copy(key)
-              Swal.fire('You did it!', '', 'success')
-            }
-          })
+        this.dialog.open(GameKeyComponent, {data: {key: key}, disableClose: true})
       }, error => console.log(error.message))
 
     this.on('acceptingFightCall')
@@ -128,5 +96,17 @@ export class SocketService {
           this.helperService.alertMessage(`The key is entered incorrectly`)
         }
       }, error => console.log(error.message))
+
+    this.on('opponentNickname')
+      .subscribe(opponentNickname => {
+        this.gameService.opponentNickname = opponentNickname
+      })
+
+    this.on('disconnected')
+      .subscribe(() => {
+        setTimeout(() => {
+          this.helperService.alertMessage(`Your opponent was disconnected`)
+        }, 0)
+      })
   }
 }

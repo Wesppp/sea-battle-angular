@@ -1,0 +1,13 @@
+<div class="chat" *ngIf="gameStatus === 'started'">
+  <div class="chat-body">
+    <input maxlength="120" class="chat-input" [(ngModel)]="message" placeholder="Chat some message">
+    <button (click)="sendMessage(message)" mat-raised-button color="primary">Send</button>
+  </div>
+
+  <ul class="messages">
+    <li class="messages-item" *ngFor="let message of messages">
+      <span class="send-time">{{ message.split(': ')[0] }}</span>
+      {{ message.split(': ')[1] }}
+    </li>
+  </ul>
+</div>

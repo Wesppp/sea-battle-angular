@@ -3,6 +3,7 @@ import {GameService} from "../../shared/services/game.service";
 import {Cell} from "../../shared/models/cell";
 import {SocketService} from "../../shared/services/socket.service";
 import {Field} from "../../shared/models/field";
+import {BattleService} from "../../shared/services/battle.service";
 
 @Component({
   selector: 'app-opponent-field',
@@ -16,25 +17,24 @@ export class OpponentFieldComponent implements OnInit {
   showShips: boolean = false
 
   constructor(private gameService: GameService,
-              private socketService: SocketService) {}
+              private socketService: SocketService,
+              private battleService: BattleService) {}
 
   ngOnInit(): void {
-    this.socketService.on('showShips')
-      .subscribe(field => {
-        this.gameService.opponentField = field
-        this.showShips = true
-      })
   }
 
   makeShot(cell: Cell) {
-    this.showShips = false
     if (this.gameService.game.status !== 'started' || !this.gameService.playerTurn) return;
-    if (cell.status === 4 || cell.status === 3) return
+    if (cell.status === 'hit' || cell.status === 'miss') return
 
-    this.socketService.emit('addShot', {x: cell.x, y: cell.y}).subscribe()
+    this.battleService.addShot({x: cell.x, y: cell.y})
   }
 
   get opponentField(): Field {
     return this.gameService.opponentField
+  }
+
+  get showOpponentShips(): boolean {
+    return this.gameService.showOpponentShips
   }
 }

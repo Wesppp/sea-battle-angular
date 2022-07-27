@@ -1,4 +1,4 @@
-import {CellStatus} from "./cell-status";
+import {CellStatus} from "../enums/cell-status";
 import {Ship} from "./ship";
 
 export class Cell {

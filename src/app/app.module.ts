@@ -23,6 +23,10 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import { CustomRegistrationModalComponent } from './components/modals/custom-registration-modal/custom-registration-modal.component';
 import { LayoutModule } from "@angular/cdk/layout";
 import { InfiniteScrollModule } from "ngx-infinite-scroll";
+import { ChatComponent } from './components/chat/chat.component';
+import { NavigationComponent } from './components/navigation/navigation.component';
+import { InsertingKeyModalComponent } from './components/modals/inserting-key-modal/inserting-key-modal.component';
+import { GameKeyComponent } from './components/modals/game-key-modal/game-key.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +37,11 @@ import { InfiniteScrollModule } from "ngx-infinite-scroll";
     LoginPageComponent,
     GameHistoriesModalComponent,
     ProgressSpinnerComponent,
-    CustomRegistrationModalComponent
+    CustomRegistrationModalComponent,
+    ChatComponent,
+    NavigationComponent,
+    InsertingKeyModalComponent,
+    GameKeyComponent
   ],
   imports: [
     BrowserModule,

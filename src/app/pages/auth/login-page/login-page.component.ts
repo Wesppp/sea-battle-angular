@@ -7,6 +7,7 @@ import {
   CustomRegistrationModalComponent
 } from "../../../components/modals/custom-registration-modal/custom-registration-modal.component";
 import {FormGroup} from "@angular/forms";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-login-page',
@@ -17,7 +18,10 @@ export class LoginPageComponent implements OnInit {
 
   constructor(public dialog: MatDialog,
               private userService: UserService,
-              private authService: AuthService) { }
+              private authService: AuthService,
+              private router: Router) {
+    if (this.authService.isLoggedIn) { this.router.navigate(['/game']) }
+  }
 
   ngOnInit(): void {
     this.openLoginDialog()

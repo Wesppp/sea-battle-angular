@@ -1,0 +1,18 @@
+<div class="modal">
+  <form [formGroup]="form">
+    <h1 mat-dialog-title class="modal-title">Enter the game key</h1>
+    <div mat-dialog-content class="modal-content">
+      <mat-form-field class="key-input" appearance="fill">
+        <mat-label>Game key</mat-label>
+        <input formControlName="key" matInput placeholder="Some key...">
+      </mat-form-field>
+    </div>
+    <div mat-dialog-actions class="modal-actions">
+      <button mat-raised-button color="warn"
+              mat-dialog-close [disabled]="form.invalid"
+              type="submit" (click)="enterKey(form.value)">Ok
+      </button>
+    </div>
+  </form>
+</div>
+

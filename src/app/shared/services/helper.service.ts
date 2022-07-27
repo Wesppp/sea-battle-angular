@@ -1,6 +1,6 @@
 import {ElementRef, Injectable} from '@angular/core';
 import Swal from "sweetalert2";
-import {BehaviorSubject, Observable, of} from "rxjs";
+import {Observable, of} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -39,15 +39,6 @@ export class HelperService {
 
   alertMessage(message: string) {
     Swal.fire(`${message}`)
-  }
-
-  popupWithConfirm(title: string, buttonText: string) {
-    return Swal.fire({
-      title: `${title}`,
-      showConfirmButton: true,
-      confirmButtonText: `${buttonText}`,
-      allowOutsideClick: false
-    })
   }
 
   handleError<T>(operation = 'operation', result?: T) {

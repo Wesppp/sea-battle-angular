@@ -1,5 +1,4 @@
-import {GameStatus} from "./game-status";
-import {Player} from "./player";
+import {GameStatus} from "../enums/game-status";
 
 export class Game {
   status: GameStatus
