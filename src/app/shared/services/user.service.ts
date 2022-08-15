@@ -53,6 +53,7 @@ export class UserService {
   }
 
   httpOptions = {
-    headers: new HttpHeaders({ "Accept": "application/json", "Content-Type": "application/json" })
+    headers: new HttpHeaders({ "Accept": "application/json", "Content-Type": "application/json"}),
+    withCredentials: true
   };
 }

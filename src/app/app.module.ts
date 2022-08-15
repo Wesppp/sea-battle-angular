@@ -10,7 +10,7 @@ import { PlayerFieldComponent } from './components/player-field/player-field.com
 import { OpponentFieldComponent } from './components/opponent-field/opponent-field.component';
 import {MatButtonModule} from '@angular/material/button';
 import {DragDropModule} from '@angular/cdk/drag-drop';
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatInputModule} from '@angular/material/input';
@@ -27,6 +27,7 @@ import { ChatComponent } from './components/chat/chat.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { InsertingKeyModalComponent } from './components/modals/inserting-key-modal/inserting-key-modal.component';
 import { GameKeyComponent } from './components/modals/game-key-modal/game-key.component';
+import {CustomInterceptor} from "./shared/interceptors/custom.interceptor";
 
 @NgModule({
   declarations: [
@@ -61,7 +62,13 @@ import { GameKeyComponent } from './components/modals/game-key-modal/game-key.co
     LayoutModule,
     InfiniteScrollModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: CustomInterceptor ,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

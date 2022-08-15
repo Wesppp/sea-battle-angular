@@ -1,6 +1,6 @@
 <div class="field">
   <div class="hint" *ngIf="gameStatus === 'preparing'">
-    use the mouse wheel when the ship is over the field<br> to change its direction
+    use the mouse wheel when dragging the ship<br> onto the field to change direction
   </div>
   <table class="field-grid" #field>
     <tr *ngFor="let row of player.field.shots; let i = index">
